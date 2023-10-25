@@ -1,0 +1,38 @@
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    background-image: url('./img/body.jpg');
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.memory-game {
+    display: grid;
+    grid-template-columns: repeat(4, 150px);
+    grid-template-rows: repeat(4, 150px);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.memory-card {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 24px;
+    color: transparent;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+}
+
+.memory-card img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
