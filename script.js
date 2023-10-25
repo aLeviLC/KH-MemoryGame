@@ -1,5 +1,6 @@
 const memoryGame = document.querySelector('.memory-game');
 let hasFlippedCard = false; //Carta volteada
+let lockBoard = false; //bloquear o desbloquear barajas
 let cards = [];
 var rows = 4;
 var cols = 3;
@@ -16,8 +17,6 @@ btn4x4.addEventListener("click", () => changeBoardSize(rows = 4, cols = 4));
 btn5x4.addEventListener("click", () => changeBoardSize(rows = 5, cols = 4));
 
 function changeBoardSize(rows, cols) {
-    openStartPopup();
-    memoryGame.innerHTML = "";
     initGame(rows, cols);
 }
 
@@ -46,25 +45,21 @@ function createCardElement(number) {
     card.classList.add('memory-card');
     CardFoto(card);
     card.dataset.cardNumber = number;
+    card.addEventListener('click', () => flipCard(card));
     cards.push(card);
-}
-
-function CardFoto(card) {
-    card.style.backgroundImage = `url('img/fondo.jpg')`;
 }
 
 //Funcion de voltear carta
 function flipCard(card) {
-    if (lockBoard || card === firstCard || card.classList.contains('matched')) return;
     card.classList.add('flipped');
-    if (!hasFlippedCard) {
-        hasFlippedCard = true;
-        firstCard = card;
-        CardFoto(card);
+    CardFoto(card);
+}
+
+function CardFoto(card) {
+    if (!card.classList.contains('flipped')) {
+        card.style.backgroundImage = `url('img/fondo.jpg')`;
     } else {
-        secondCard = card;
-        CardFoto(card);
-        checkForMatch();
+        card.style.backgroundImage = `url('img/${card.dataset.cardNumber}.jpg')`;
     }
 }
 
@@ -76,4 +71,3 @@ function shuffleArray(array) {
     }
     return shuffledArray;
 }
-
