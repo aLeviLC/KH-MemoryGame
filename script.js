@@ -1,7 +1,8 @@
 const memoryGame = document.querySelector('.memory-game');
+let cards = [];
 let hasFlippedCard = false; //Carta volteada
 let lockBoard = false; //bloquear o desbloquear barajas
-let cards = [];
+let firstCard, secondCard; //Para seleccionar la primera y segunda carta, asi para comprobar si hacen match
 var rows = 4;
 var cols = 3;
 
@@ -51,12 +52,21 @@ function createCardElement(number) {
 
 //Funcion de voltear carta
 function flipCard(card) {
+    if (lockBoard || card === firstCard || card.classList.contains('matched')) return;
     card.classList.add('flipped');
-    CardFoto(card);
+    if (!hasFlippedCard) {
+        hasFlippedCard = true;
+        firstCard = card;
+        CardFoto(card);
+    } else {
+        secondCard = card;
+        CardFoto(card);
+        checkForMatch();
+    }
 }
 
 function CardFoto(card) {
-    if (!card.classList.contains('flipped')) {
+    if (!card.classList.contains('flipped') || card.classList.contains('matched')) { //si hacen match se queda la imagen
         card.style.backgroundImage = `url('img/fondo.jpg')`;
     } else {
         card.style.backgroundImage = `url('img/${card.dataset.cardNumber}.jpg')`;
@@ -70,4 +80,40 @@ function shuffleArray(array) {
         [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
     }
     return shuffledArray;
+}
+
+//comprueba si hacen match
+function checkForMatch() {
+    if (firstCard.dataset.cardNumber === secondCard.dataset.cardNumber) {
+        disableCards();
+    } else {
+        unflipCards();
+    }
+}
+
+//disabilita las cartas del juego para estar intactas y se ponen en estado matched
+function disableCards() {
+    firstCard.removeEventListener('click', () => flipCard(firstCard));
+    secondCard.removeEventListener('click', () => flipCard(secondCard));
+    firstCard.classList.add('matched');
+    secondCard.classList.add('matched');
+    resetBoard();
+}
+
+//si no coinciden se voltean de vuelta a la imagen generica
+function unflipCards() {
+    lockBoard = true;
+    setTimeout(() => {
+        firstCard.classList.remove('flipped');
+        secondCard.classList.remove('flipped');
+        CardFoto(firstCard);
+        CardFoto(secondCard);
+        resetBoard();
+    }, 1000);
+}
+
+//resetea el tablero si no se hace match o si se quiere reiniciar el juego
+function resetBoard() {
+    [hasFlippedCard, lockBoard] = [false, false];
+    [firstCard, secondCard] = [null, null];
 }
