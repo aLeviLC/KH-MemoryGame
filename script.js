@@ -10,6 +10,7 @@ var cols = 3;
 const btn4x3 = document.getElementById("btn4x3");
 const btn4x4 = document.getElementById("btn4x4");
 const btn5x4 = document.getElementById("btn5x4");
+const startButton = document.getElementById("startButton"); //boton para iniciar juego
 const dimensionButtons = document.getElementById("dimensionButtons");
 
 //Al dar click rows y col cambian su valor para mandarlos a la funcion de cambiar dimension
@@ -18,6 +19,8 @@ btn4x4.addEventListener("click", () => changeBoardSize(rows = 4, cols = 4));
 btn5x4.addEventListener("click", () => changeBoardSize(rows = 5, cols = 4));
 
 function changeBoardSize(rows, cols) {
+    openStartPopup();
+    memoryGame.innerHTML = "";
     initGame(rows, cols);
 }
 
@@ -82,6 +85,11 @@ function shuffleArray(array) {
     return shuffledArray;
 }
 
+//comprobar si todas las cartas estan en estado matched y asi hacer que aparezca la ventana de "has ganado"
+function checkAllCardsMatched() {
+    return cards.every(card => card.classList.contains('matched'));
+}
+
 //comprueba si hacen match
 function checkForMatch() {
     if (firstCard.dataset.cardNumber === secondCard.dataset.cardNumber) {
@@ -97,6 +105,19 @@ function disableCards() {
     secondCard.removeEventListener('click', () => flipCard(secondCard));
     firstCard.classList.add('matched');
     secondCard.classList.add('matched');
+
+    if (checkAllCardsMatched()) {
+        //ventana que te indica que ganaste y ademas boton para saber si quieres intentar de nuevo jugar
+        const winPopup = document.getElementById("winPopup");
+        winPopup.style.top = "0";
+        const retryButton = document.getElementById("retryButton");
+        retryButton.addEventListener("click", () => {
+            const winPopup = document.getElementById("winPopup");
+            winPopup.style.top = "100%";
+            changeBoardSize(rows, cols);
+        });
+    }
+
     resetBoard();
 }
 
@@ -117,3 +138,18 @@ function resetBoard() {
     [hasFlippedCard, lockBoard] = [false, false];
     [firstCard, secondCard] = [null, null];
 }
+
+window.addEventListener("load", openStartPopup);
+
+function openStartPopup() {
+    const startPopup = document.getElementById("startPopup");
+    startPopup.style.top = "0";
+    startPopup.style.background = "linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60))";
+}
+
+function closeStartPopup() {
+    const startPopup = document.getElementById("startPopup");
+    startPopup.style.top = "100%";
+    initGame(rows, cols);
+}
+startButton.addEventListener("click", closeStartPopup);
