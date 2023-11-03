@@ -24,15 +24,31 @@
             <h3>¡FELICIDADES!</h3>
             <br>
             <h4>HAS GANADO</h4>
+            <input type="text" id="playerName" placeholder="Ingrese su nombre:">
+            <br>
             <button id="retryButton">Try again</button>
         </div>
     </div>
-    <div class="memory-game">
-    </div>
-    <div class="dimension-buttons">
-        <button id="btn4x3">4x3</button>
-        <button id="btn4x4">4x4</button>
-        <button id="btn5x4">5x4</button>
+    <div class="container">
+        <div class="memory-container">
+            <div class="memory-game">
+            </div>
+            <div class="dimension-buttons">
+                <button id="btn4x3">4x3</button>
+                <button id="btn4x4">4x4</button>
+                <button id="btn5x4">5x4</button>
+            </div>
+        </div>
+        <div class="scoreboard">
+            <h2>SCORE LEADERBOARD</h2>
+            <table>
+                <tr>
+                </tr>
+                <tbody id="usersTable">
+                </tbody>
+            </table>
+        </div>
+        <div id="timer">Time: 0.0</div>
     </div>
     <script src="script.js"></script>
 </body>
