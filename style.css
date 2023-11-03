@@ -1,15 +1,72 @@
 body {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    margin: 0;
-    background-image: url('./img/body.jpg');
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    min-height: 100vh;
+    margin: 0;
+    background-image: url('./img/body.jpg');
+    background-size: cover;
+    font-size: 16px;
 }
 
-/*para las ventanas emergentes*/
+/* Estilos para el contenedor principal */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Estilos para el juego de memoria */
+.memory-container {
+    flex: 1;
+}
+
+/* Estilos para la tabla de puntuaciones */
+.scoreboard {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    text-align: center;
+}
+
+/* Estilos para la tabla de puntuaciones */
+#usersTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#usersTable th, #usersTable td {
+    padding: 8px 12px;
+    border: 1px solid #fff;
+    text-align: center;
+}
+
+#usersTable th {
+    background-color: #007BFF;
+    color: #fff;
+    text-align: center;
+    font-size: 24px;
+}
+
+#usersTable tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#usersTable tr:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/*ventanas emergentes*/
 .popup {
     position: fixed;
     display: flex;
@@ -34,7 +91,13 @@ body {
     color: #fff;
 }
 
-/*diseño del contenido de las ventanas emergentes*/
+img {
+    max-width: 100px;
+    text-align: center;
+    margin-bottom: -140px;
+}
+
+/*headers*/
 h1 {
     padding-bottom: 10px;
     font-size: 60px;
@@ -67,6 +130,8 @@ h4 {
     color: #fff;
 }
 
+
+/*botones*/
 #startButton {
     background: #007BFF;
     color: #fff;
@@ -83,12 +148,32 @@ h4 {
     color: #fff;
     font-weight: bold;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 30px;
     border-radius: 10px;
     font-size: 16px;
     cursor: pointer;
 }
 
+.dimension-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.dimension-buttons button {
+    background: #007BFF;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+/*diseño cartas*/
 .memory-game {
     display: grid;
     grid-template-columns: repeat(4, 150px);
@@ -111,42 +196,29 @@ h4 {
     transition: transform 0.5s;
 }
 
-.memory-card img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
-}
-
-/*carta volteada animacion*/
 .memory-card.flipped {
     transform: rotateY(180deg);
     transform-style: preserve-3d;
     transition: transform 0.5s;
 }
 
-img {
-    max-width: 100px;
-    text-align: center;
-    margin-bottom: -140px;
+.memory-card img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
 }
 
-/*Diseño botones*/
-.dimension-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+#playerName{
+    margin-bottom: 10px;
 }
 
-.dimension-buttons button {
-    background: #007BFF;
-    color: #fff;
+
+/*contador*/
+#timer {
+    font-size: 35px;
     font-weight: bold;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    margin: 0 10px;
+    color: azure;
+    position: fixed;
+    bottom: 20px; /* Ajusta la distancia desde la parte inferior */
+    left: 20px; /* Ajusta la distancia desde el lado izquierdo */
 }
-
