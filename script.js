@@ -203,11 +203,11 @@ function startTimer() {
     clearInterval(timerInterval);
     time = 0;
     timerInterval = setInterval(function () {
-        time += 100; // Incrementa el tiempo en 100 milisegundos
+        time += 100;
         const totalSeconds= time / 1000;
-        const seconds = totalSeconds.toFixed(1); // Muestra un decimal para los segundos
+        const seconds = totalSeconds.toFixed(1);
         timerElement.textContent = `Time: ${seconds}`;
-    }, 100); // Actualiza el contador cada 100 milisegundos (puedes ajustar esto según tus necesidades)
+    }, 100);
 }
 
 //actualizar tabla score
