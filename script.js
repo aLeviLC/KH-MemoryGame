@@ -108,33 +108,41 @@ function disableCards() {
         winPopup.style.top = "0";
         const retryButton = document.getElementById("retryButton");
         clearInterval(timerInterval);
-        retryButton.addEventListener("click", () => {
-            const playerNameInput = document.getElementById("playerName");
-            const playerName = playerNameInput.value;
-            var timefor = (time/100)/10;
-
-            let user= {
-                name: playerName,
-                time: timefor
+        const playerNameInput = document.getElementById("playerName");
+        playerNameInput.addEventListener('input', () => {
+            // Verifica si el cuadro de texto tiene algún valor
+            if (playerNameInput.value.trim() !== '') {
+                retryButton.disabled = false;
+                retryButton.addEventListener("click", () => {
+                    const playerName = playerNameInput.value;
+                    var timefor = (time/100)/10;
+        
+                    let user= {
+                        name: playerName,
+                        time: timefor
+                    }
+        
+                    console.log(JSON.stringify(user, null, 2));
+                    fetch(`${url}/users.json`, {
+                        method: 'POST',
+                        body: JSON.stringify(user, null, 2),
+                        headers: { 'Content-type': 'application/json; charset=UTF-8' }
+                    })
+                        .then(response => response.json())
+                        .catch(error => console.error("Ha ocurrido un error: ", error));
+        
+                    playerNameInput.value = "";
+        
+                    RankConsult();
+                    const winPopup = document.getElementById("winPopup");
+                    winPopup.style.top = "100%";
+                    changeBoardSize(rows, cols);
+                });
+            } else {
+                retryButton.disabled = true;
             }
-
-            console.log(JSON.stringify(user, null, 2));
-            fetch(`${url}/users.json`, {
-                method: 'POST',
-                body: JSON.stringify(user, null, 2),
-                headers: { 'Content-type': 'application/json; charset=UTF-8' }
-            })
-                .then(response => response.json())
-                .catch(error => console.error("Ha ocurrido un error: ", error));
-
-            playerNameInput.value = "";
-
-            const winPopup = document.getElementById("winPopup");
-            winPopup.style.top = "100%";
-            changeBoardSize(rows, cols);
         });
     }
-
     resetBoard();
 }
 
@@ -172,6 +180,7 @@ window.addEventListener("load", openStartPopup);
 
 //ventanas emergentes
 function openStartPopup() {
+    RankConsult();
     timerElement.textContent = `Time: 0.0`;
     clearInterval(timerInterval);
     const startPopup = document.getElementById("startPopup");
@@ -216,7 +225,7 @@ async function RankConsult(){
 function renderTable(data) {
     let tbody = document.getElementById('usersTable');
     let rowHTML = '';
-    const sortedData = Object.keys(data).map(key => data[key]).sort((a, b) => a.time - b.time);
+    const sortedData = Object.keys(data).map(key => data[key]).sort((a, b) => a.time - b.time).slice(0, 10); // Obtiene solo las primeras 10 entradas
 
     sortedData.forEach((item, index) => {
         const position = index + 1;
