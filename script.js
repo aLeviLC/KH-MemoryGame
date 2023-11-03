@@ -5,7 +5,7 @@ let hasFlippedCard = false;
 let lockBoard = false;
 let firstCard, secondCard;
 let time = 0;
-let timerInterval; 
+let timerInterval;
 let url = "https://kh-mg-e2208-default-rtdb.firebaseio.com/"; //coneccion a bd
 var rows = 4;
 var cols = 3;
@@ -97,6 +97,36 @@ function checkForMatch() {
     }
 }
 
+//agg usuario a leaderboard
+function aggUser(data) {
+    const playerName = data;
+    var timefor = (time / 100) / 10;
+
+    let user = {
+        name: playerName,
+        time: timefor
+    }
+    fetch(`${url}/users.json`, {
+        method: 'POST',
+        body: JSON.stringify(user, null, 2),
+        headers: { 'Content-type': 'application/json; charset=UTF-8' }
+    })
+        .then(response => response.json())
+        .catch(error => console.error("Ha ocurrido un error: ", error));
+    RankConsult();
+}
+
+//para no repetir los clicks y uso de retry boton
+function retryButtonClickHandler() {
+    const playerNameInput = document.getElementById("playerName");
+    aggUser(playerNameInput.value);
+    playerNameInput.value = "";
+    const winPopup = document.getElementById("winPopup");
+    winPopup.style.top = "100%";
+    changeBoardSize(rows, cols);
+}
+
+//verificacion de cartas general y unico
 function disableCards() {
     firstCard.removeEventListener('click', () => flipCard(firstCard));
     secondCard.removeEventListener('click', () => flipCard(secondCard));
@@ -106,38 +136,18 @@ function disableCards() {
     if (checkAllCardsMatched()) {
         const winPopup = document.getElementById("winPopup");
         winPopup.style.top = "0";
+
         const retryButton = document.getElementById("retryButton");
-        clearInterval(timerInterval);
         const playerNameInput = document.getElementById("playerName");
+
+        clearInterval(timerInterval);
+
+        // Verifica si el cuadro de texto tiene algún valor
         playerNameInput.addEventListener('input', () => {
-            // Verifica si el cuadro de texto tiene algún valor
             if (playerNameInput.value.trim() !== '') {
                 retryButton.disabled = false;
-                retryButton.addEventListener("click", () => {
-                    const playerName = playerNameInput.value;
-                    var timefor = (time/100)/10;
-        
-                    let user= {
-                        name: playerName,
-                        time: timefor
-                    }
-        
-                    console.log(JSON.stringify(user, null, 2));
-                    fetch(`${url}/users.json`, {
-                        method: 'POST',
-                        body: JSON.stringify(user, null, 2),
-                        headers: { 'Content-type': 'application/json; charset=UTF-8' }
-                    })
-                        .then(response => response.json())
-                        .catch(error => console.error("Ha ocurrido un error: ", error));
-        
-                    playerNameInput.value = "";
-        
-                    RankConsult();
-                    const winPopup = document.getElementById("winPopup");
-                    winPopup.style.top = "100%";
-                    changeBoardSize(rows, cols);
-                });
+                retryButton.removeEventListener("click", retryButtonClickHandler); // Elimina evento anterior
+                retryButton.addEventListener("click", retryButtonClickHandler); // Agrega el evento actual
             } else {
                 retryButton.disabled = true;
             }
@@ -204,18 +214,18 @@ function startTimer() {
     time = 0;
     timerInterval = setInterval(function () {
         time += 100;
-        const totalSeconds= time / 1000;
+        const totalSeconds = time / 1000;
         const seconds = totalSeconds.toFixed(1);
         timerElement.textContent = `Time: ${seconds}`;
     }, 100);
 }
 
 //actualizar tabla score
-async function RankConsult(){
+async function RankConsult() {
     try {
         const response = await fetch(`${url}/users.json`);
         const users = await response.json();
-        renderTable(users);   
+        renderTable(users);
     } catch (error) {
         console.error("Ha ocurrido un error: ", error);
     }
