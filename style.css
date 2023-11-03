@@ -132,6 +132,18 @@ h4 {
 
 
 /*botones*/
+
+/*retry diseño*/
+#retryButton:disabled {
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+#retryButton:enabled {
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
 #startButton {
     background: #007BFF;
     color: #fff;
