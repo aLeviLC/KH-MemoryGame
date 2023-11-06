@@ -6,9 +6,9 @@ let lockBoard = false;
 let firstCard, secondCard;
 let time = 0;
 let timerInterval;
-let url = "https://kh-mg-e2208-default-rtdb.firebaseio.com/"; //coneccion a bd
-var rows = 4;
-var cols = 3;
+const url = "https://kh-mg-e2208-default-rtdb.firebaseio.com/"; //coneccion a bd
+let rows = 4;
+let cols = 3;
 
 const btn4x3 = document.getElementById("btn4x3");
 const btn4x4 = document.getElementById("btn4x4");
@@ -101,19 +101,48 @@ function checkForMatch() {
 function aggUser(data) {
     const playerName = data;
     var timefor = (time / 100) / 10;
-
-    let user = {
-        name: playerName,
-        time: timefor
+    if (rows == 4 && cols == 3) {
+        let user = {
+            name: playerName,
+            time: timefor,
+            dim: 3
+        }
+        fetch(`${url}/users3.json`, {
+            method: 'POST',
+            body: JSON.stringify(user, null, 2),
+            headers: { 'Content-type': 'application/json; charset=UTF-8' }
+        })
+            .then(response => response.json())
+            .catch(error => console.error("Ha ocurrido un error: ", error));
     }
-    fetch(`${url}/users.json`, {
-        method: 'POST',
-        body: JSON.stringify(user, null, 2),
-        headers: { 'Content-type': 'application/json; charset=UTF-8' }
-    })
-        .then(response => response.json())
-        .catch(error => console.error("Ha ocurrido un error: ", error));
-    RankConsult();
+    else if (rows == 4 && cols == 4) {
+        let user = {
+            name: playerName,
+            time: timefor,
+            dim: 4
+        }
+        fetch(`${url}/users4.json`, {
+            method: 'POST',
+            body: JSON.stringify(user, null, 2),
+            headers: { 'Content-type': 'application/json; charset=UTF-8' }
+        })
+            .then(response => response.json())
+            .catch(error => console.error("Ha ocurrido un error: ", error));
+    }
+    else if (rows == 5 && cols == 4) {
+        let user = {
+            name: playerName,
+            time: timefor,
+            dim: 5
+        }
+        fetch(`${url}/users5.json`, {
+            method: 'POST',
+            body: JSON.stringify(user, null, 2),
+            headers: { 'Content-type': 'application/json; charset=UTF-8' }
+        })
+            .then(response => response.json())
+            .catch(error => console.error("Ha ocurrido un error: ", error));
+    }
 }
 
 //para no repetir los clicks y uso de retry boton
@@ -124,6 +153,7 @@ function retryButtonClickHandler() {
     const winPopup = document.getElementById("winPopup");
     winPopup.style.top = "100%";
     changeBoardSize(rows, cols);
+    RankConsult();
 }
 
 //verificacion de cartas general y unico
@@ -223,9 +253,21 @@ function startTimer() {
 //actualizar tabla score
 async function RankConsult() {
     try {
-        const response = await fetch(`${url}/users.json`);
-        const users = await response.json();
-        renderTable(users);
+        if (rows == 4 && cols == 3) {
+            const response = await fetch(`${url}/users3.json`);
+            const users = await response.json();
+            renderTable(users);
+        }
+        else if (rows == 4 && cols == 4) {
+            const response = await fetch(`${url}/users4.json`);
+            const users = await response.json();
+            renderTable(users);
+        }
+        else if (rows == 5 && cols == 4) {
+            const response = await fetch(`${url}/users5.json`);
+            const users = await response.json();
+            renderTable(users);
+        }
     } catch (error) {
         console.error("Ha ocurrido un error: ", error);
     }
@@ -244,7 +286,7 @@ function renderTable(data) {
             <td>${crown} ${position}</td>
             <td>${item.name}</td>
             <td>${item.time} seg</td>
-        </tr>`;
+            </tr>`;
     });
 
     tbody.innerHTML = rowHTML;
