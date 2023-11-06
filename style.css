@@ -45,7 +45,8 @@ body {
     margin-top: 10px;
 }
 
-#usersTable th, #usersTable td {
+#usersTable th,
+#usersTable td {
     padding: 8px 12px;
     border: 1px solid #fff;
     text-align: center;
@@ -220,7 +221,7 @@ h4 {
     object-fit: cover;
 }
 
-#playerName{
+#playerName {
     margin-bottom: 10px;
 }
 
@@ -231,6 +232,8 @@ h4 {
     font-weight: bold;
     color: azure;
     position: fixed;
-    bottom: 20px; /* Ajusta la distancia desde la parte inferior */
-    left: 20px; /* Ajusta la distancia desde el lado izquierdo */
+    bottom: 20px;
+    /* Ajusta la distancia desde la parte inferior */
+    left: 20px;
+    /* Ajusta la distancia desde el lado izquierdo */
 }
